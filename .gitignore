@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+.cache/
+notes/
+complete-intro-to-react-v5-master/
+coverage/
+.vscode/
+.env
