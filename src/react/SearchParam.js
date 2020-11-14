@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import pet, { ANIMALS } from "@frontendmasters/pet";
 import UseDropDown from "./UseDropDown";
-import ShowPet from "./ShowPet";
+import PetResults from "./PetResults";
 import ThemeContext from "./ThemeContext";
 
 function SearchParam() {
@@ -78,7 +78,7 @@ function SearchParam() {
         </label>
         <button style={{ backgroundColor: buttonColor }}>Submit</button>
       </form>
-      {Array.isArray(getPetsList) ? <ShowPet pets={getPetsList} /> : null}
+      {Array.isArray(getPetsList) ? <PetResults pets={getPetsList} /> : null}
     </div>
   );
 }

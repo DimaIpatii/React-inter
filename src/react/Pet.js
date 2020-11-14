@@ -7,7 +7,7 @@ export const Pet = ({ name, animal, breed, id, media, location } = {}) => {
   if (media.length > 0) {
     imageAdress = media[0].small;
   }
-
+  
   return (
     <div className="pet" id={id}>
       <div className="image-container">

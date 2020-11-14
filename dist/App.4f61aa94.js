@@ -30956,7 +30956,178 @@ var createRoute = function createRoute(basepath) {
 var shouldNavigate = function shouldNavigate(event) {
   return !event.defaultPrevented && event.button === 0 && !(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 }; ////////////////////////////////////////////////////////////////////////
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","invariant":"../node_modules/invariant/browser.js","create-react-context":"../node_modules/create-react-context/lib/index.js","react-lifecycles-compat":"../node_modules/react-lifecycles-compat/react-lifecycles-compat.es.js","./lib/utils":"../node_modules/@reach/router/es/lib/utils.js","./lib/history":"../node_modules/@reach/router/es/lib/history.js"}],"../node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","invariant":"../node_modules/invariant/browser.js","create-react-context":"../node_modules/create-react-context/lib/index.js","react-lifecycles-compat":"../node_modules/react-lifecycles-compat/react-lifecycles-compat.es.js","./lib/utils":"../node_modules/@reach/router/es/lib/utils.js","./lib/history":"../node_modules/@reach/router/es/lib/history.js"}],"react/ThemeContext.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = require("react");
+
+var ThemeContext = /*#__PURE__*/(0, _react.createContext)(["green", () => {}]);
+var _default = ThemeContext;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
+
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
+
+  return bundleURL;
+}
+
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../node_modules/parcel-bundler/src/builtins/bundle-loader.js":[function(require,module,exports) {
+var getBundleURL = require('./bundle-url').getBundleURL;
+
+function loadBundlesLazy(bundles) {
+  if (!Array.isArray(bundles)) {
+    bundles = [bundles];
+  }
+
+  var id = bundles[bundles.length - 1];
+
+  try {
+    return Promise.resolve(require(id));
+  } catch (err) {
+    if (err.code === 'MODULE_NOT_FOUND') {
+      return new LazyPromise(function (resolve, reject) {
+        loadBundles(bundles.slice(0, -1)).then(function () {
+          return require(id);
+        }).then(resolve, reject);
+      });
+    }
+
+    throw err;
+  }
+}
+
+function loadBundles(bundles) {
+  return Promise.all(bundles.map(loadBundle));
+}
+
+var bundleLoaders = {};
+
+function registerBundleLoader(type, loader) {
+  bundleLoaders[type] = loader;
+}
+
+module.exports = exports = loadBundlesLazy;
+exports.load = loadBundles;
+exports.register = registerBundleLoader;
+var bundles = {};
+
+function loadBundle(bundle) {
+  var id;
+
+  if (Array.isArray(bundle)) {
+    id = bundle[1];
+    bundle = bundle[0];
+  }
+
+  if (bundles[bundle]) {
+    return bundles[bundle];
+  }
+
+  var type = (bundle.substring(bundle.lastIndexOf('.') + 1, bundle.length) || bundle).toLowerCase();
+  var bundleLoader = bundleLoaders[type];
+
+  if (bundleLoader) {
+    return bundles[bundle] = bundleLoader(getBundleURL() + bundle).then(function (resolved) {
+      if (resolved) {
+        module.bundle.register(id, resolved);
+      }
+
+      return resolved;
+    }).catch(function (e) {
+      delete bundles[bundle];
+      throw e;
+    });
+  }
+}
+
+function LazyPromise(executor) {
+  this.executor = executor;
+  this.promise = null;
+}
+
+LazyPromise.prototype.then = function (onSuccess, onError) {
+  if (this.promise === null) this.promise = new Promise(this.executor);
+  return this.promise.then(onSuccess, onError);
+};
+
+LazyPromise.prototype.catch = function (onError) {
+  if (this.promise === null) this.promise = new Promise(this.executor);
+  return this.promise.catch(onError);
+};
+},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"react/App.js":[function(require,module,exports) {
+"use strict";
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _reactDom = require("react-dom");
+
+var _router = require("@reach/router");
+
+var _ThemeContext = _interopRequireDefault(require("./ThemeContext"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+const Details = /*#__PURE__*/(0, _react.lazy)(() => require("_bundle_loader")(require.resolve("./Details")));
+const SearchParam = /*#__PURE__*/(0, _react.lazy)(() => require("_bundle_loader")(require.resolve('./SearchParam')));
+
+const App = () => {
+  var themeHook = (0, _react.useState)({
+    buttonColor: "darkblue",
+    textColor: "white"
+  });
+  return /*#__PURE__*/_react.default.createElement(_react.default.StrictMode, null, /*#__PURE__*/_react.default.createElement(_ThemeContext.default.Provider, {
+    value: themeHook
+  }, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("header", null, /*#__PURE__*/_react.default.createElement(_router.Link, {
+    to: "/"
+  }, /*#__PURE__*/_react.default.createElement("h1", {
+    id: "something-important"
+  }, "Adopt me!"))), /*#__PURE__*/_react.default.createElement(_react.Suspense, {
+    fallback: /*#__PURE__*/_react.default.createElement("h1", null, "loading route \u2026")
+  }, /*#__PURE__*/_react.default.createElement(_router.Router, null, /*#__PURE__*/_react.default.createElement(SearchParam, {
+    path: "/"
+  }), /*#__PURE__*/_react.default.createElement(Details, {
+    path: "/details/:id"
+  }))))));
+};
+
+(0, _reactDom.render)( /*#__PURE__*/_react.default.createElement(App, null), // What to render...
+document.getElementById("root") // Where to render...
+);
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","@reach/router":"../node_modules/@reach/router/es/index.js","./ThemeContext":"react/ThemeContext.js","_bundle_loader":"../node_modules/parcel-bundler/src/builtins/bundle-loader.js","./Details":[["Details.9f59c6bf.js","react/Details.js"],"Details.9f59c6bf.js.map","react/Details.js"],"./SearchParam":[["SearchParam.620dd375.js","react/SearchParam.js"],"SearchParam.620dd375.js.map","react/SearchParam.js"]}],"../node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
 'use strict';
 
 module.exports = function bind(fn, thisArg) {
@@ -32630,555 +32801,7 @@ if (undefined === "mock") {
 }
 
 module.exports.ANIMALS = require("./animals");
-},{"./impl":"../node_modules/@frontendmasters/pet/impl.js","./animals":"../node_modules/@frontendmasters/pet/animals.js"}],"react/UseDropDown.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireWildcard(require("react"));
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-var UseDropDown = (label, defaultState, options) => {
-  var [getState, setState] = (0, _react.useState)(defaultState);
-  var id = `use-dropdown-${label.replace(" ", "").toLowerCase()}`;
-
-  var DropDown = () => {
-    return /*#__PURE__*/_react.default.createElement("label", {
-      htmlFor: id
-    }, label, /*#__PURE__*/_react.default.createElement("select", {
-      id: id,
-      value: getState,
-      onChange: event => setState(event.target.value),
-      onBlur: event => setState(event.target.value),
-      disabled: options.length == 0
-    }, /*#__PURE__*/_react.default.createElement("option", null, "All"), options.map((item, index) => /*#__PURE__*/_react.default.createElement("option", {
-      value: item,
-      key: index
-    }, item))));
-  };
-
-  return [getState, DropDown, setState];
-};
-
-var _default = UseDropDown;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js"}],"react/Pet.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Pet = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _router = require("@reach/router");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const Pet = ({
-  name,
-  animal,
-  breed,
-  id,
-  media,
-  location
-} = {}) => {
-  var imageAdress = "https://placecorgi.com/300/300";
-
-  if (media.length > 0) {
-    imageAdress = media[0].small;
-  }
-
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "pet",
-    id: id
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "image-container"
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    src: imageAdress,
-    alt: name
-  })), /*#__PURE__*/_react.default.createElement("div", {
-    className: "info"
-  }, /*#__PURE__*/_react.default.createElement("h1", null, name), /*#__PURE__*/_react.default.createElement("h2", null, `${animal} - ${breed} - ${location}`)), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_router.Link, {
-    to: `details/${id}`
-  }, "Details")));
-};
-
-exports.Pet = Pet;
-},{"react":"../node_modules/react/index.js","@reach/router":"../node_modules/@reach/router/es/index.js"}],"react/ShowPet.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _Pet = require("./Pet");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const ShowPet = ({
-  pets
-}) => {
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "search"
-  }, pets.length == 0 ? /*#__PURE__*/_react.default.createElement("h1", null, "No pets found\uD83D\uDE22! Try again...") : // name, animal, breed, description
-  pets.map(pet => /*#__PURE__*/_react.default.createElement(_Pet.Pet, {
-    animal: pet.type,
-    name: pet.name,
-    key: pet.id,
-    breed: pet.breeds.primary,
-    media: pet.photos,
-    location: `${pet.contact.address.city}, ${pet.contact.address.state}`,
-    id: pet.id
-  })));
-};
-
-var _default = ShowPet;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js","./Pet":"react/Pet.js"}],"react/ThemeContext.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = require("react");
-
-var ThemeContext = /*#__PURE__*/(0, _react.createContext)(["green", () => {}]);
-var _default = ThemeContext;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js"}],"react/SearchParam.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _pet = _interopRequireWildcard(require("@frontendmasters/pet"));
-
-var _UseDropDown = _interopRequireDefault(require("./UseDropDown"));
-
-var _ShowPet = _interopRequireDefault(require("./ShowPet"));
-
-var _ThemeContext = _interopRequireDefault(require("./ThemeContext"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function SearchParam() {
-  var [getLocation, setLocation] = (0, _react.useState)("Seattle, Wa");
-  var [listOfBreeds, setListOfBreeds] = (0, _react.useState)([]);
-  var [animalName, AnimalsDropDown] = (0, _UseDropDown.default)("Animals", "All", _pet.ANIMALS);
-  var [animalBreed, AnimalsBreedDropDown, selectBreed] = (0, _UseDropDown.default)("Breeds", "", listOfBreeds);
-  var [getPetsList, setPets] = (0, _react.useState)("");
-  var [{
-    buttonColor
-  }, setTheme] = (0, _react.useContext)(_ThemeContext.default); // ********************************************
-
-  async function submitAnimal() {
-    var {
-      animals
-    } = await _pet.default.animals({
-      location: getLocation,
-      breed: animalBreed,
-      type: animalName
-    });
-
-    if (animals) {
-      setPets(animals);
-    } else {
-      setPets([]);
-    }
-  }
-
-  (0, _react.useEffect)(() => {
-    setListOfBreeds([]);
-    selectBreed("");
-
-    _pet.default.breeds(animalName).then(({
-      breeds
-    }) => {
-      if (Array.isArray(breeds)) {
-        const breedsNames = breeds.map(({
-          name
-        }) => name);
-        setListOfBreeds(breedsNames);
-      }
-    }, console.error);
-  }, [animalName, selectBreed, setListOfBreeds]); // ********************************************
-
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "search-params"
-  }, /*#__PURE__*/_react.default.createElement("form", {
-    onSubmit: event => {
-      event.preventDefault();
-      submitAnimal();
-    }
-  }, /*#__PURE__*/_react.default.createElement("label", {
-    htmlFor: "lovation"
-  }, "Location", /*#__PURE__*/_react.default.createElement("input", {
-    id: "location",
-    value: getLocation,
-    placeholder: "Location",
-    onChange: event => setLocation(event.target.value)
-  })), /*#__PURE__*/_react.default.createElement(AnimalsDropDown, null), /*#__PURE__*/_react.default.createElement(AnimalsBreedDropDown, null), /*#__PURE__*/_react.default.createElement("label", {
-    htmlFor: "theme"
-  }, "Theme", /*#__PURE__*/_react.default.createElement("select", {
-    value: buttonColor,
-    onChange: event => setTheme({
-      buttonColor: event.target.value
-    }),
-    onBlur: event => setTheme({
-      buttonColor: event.target.value
-    })
-  }, /*#__PURE__*/_react.default.createElement("option", {
-    value: "peru"
-  }, "Peru"), /*#__PURE__*/_react.default.createElement("option", {
-    value: "darkblue"
-  }, "Darkblue"), /*#__PURE__*/_react.default.createElement("option", {
-    value: "mediumorchid"
-  }, "Mediun Orchid"), /*#__PURE__*/_react.default.createElement("option", {
-    value: "chartreuse"
-  }, "Chart Reuse"))), /*#__PURE__*/_react.default.createElement("button", {
-    style: {
-      backgroundColor: buttonColor
-    }
-  }, "Submit")), Array.isArray(getPetsList) ? /*#__PURE__*/_react.default.createElement(_ShowPet.default, {
-    pets: getPetsList
-  }) : null);
-}
-
-var _default = SearchParam;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js","@frontendmasters/pet":"../node_modules/@frontendmasters/pet/index.js","./UseDropDown":"react/UseDropDown.js","./ShowPet":"react/ShowPet.js","./ThemeContext":"react/ThemeContext.js"}],"react/Modal.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _reactDom = require("react-dom");
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-var Modal = ({
-  children
-}) => {
-  var elRef = (0, _react.useRef)(null);
-
-  if (!elRef.current) {
-    const div = document.createElement("div");
-    elRef.current = div;
-  } // remove <div> once Modal is no longer being rendered:
-
-
-  (0, _react.useEffect)(() => {
-    var modalRoot = document.getElementById("modal");
-    modalRoot.appendChild(elRef.current);
-    return () => modalRoot.removeChild(elRef.current);
-  }, []);
-  return /*#__PURE__*/(0, _reactDom.createPortal)( /*#__PURE__*/_react.default.createElement("div", null, children), elRef.current);
-};
-
-var _default = Modal;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js"}],"react/Carousel.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-class Carousel extends _react.default.Component {
-  constructor() {
-    super();
-    this.state = {
-      photos: [],
-      active: 0
-    };
-    this.handleIndexClick = this.handleIndexClick.bind(this);
-  }
-
-  static getDerivedStateFromProps({
-    media
-  }) {
-    var photos = ["https://placecorgi.com/600/600"];
-
-    if (media.length > 0) {
-      photos = media.map(({
-        large
-      }) => large);
-    }
-
-    return {
-      photos
-    };
-  }
-
-  handleIndexClick(event) {
-    this.setState({
-      active: Number(event.target.dataset.index)
-    });
-  }
-
-  render() {
-    var {
-      photos,
-      active
-    } = this.state;
-    return /*#__PURE__*/_react.default.createElement("div", {
-      className: "corousel"
-    }, /*#__PURE__*/_react.default.createElement("img", {
-      src: photos[active],
-      alt: "animal"
-    }), /*#__PURE__*/_react.default.createElement("div", {
-      className: "carousel-smaller"
-    }, this.props.media.map((photo, index) =>
-    /*#__PURE__*/
-    // disable ESlint for next line:
-    // eslint-disable-next-line
-    _react.default.createElement("img", {
-      src: photo.large,
-      key: index,
-      onClick: this.handleIndexClick,
-      "data-index": index,
-      className: index == active ? "active" : "",
-      alt: "animal"
-    }))));
-  }
-
-}
-
-var _default = Carousel;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js"}],"react/ErrorBoundary.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _router = require("@reach/router");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-class ErrorBoundary extends _react.default.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hasError: false,
-      redirect: false
-    };
-  }
-
-  static getDerivedStateFromError() {
-    return {
-      hasError: true
-    };
-  }
-
-  componentDidCatch(error, info) {
-    console.log(`ErrorBoundary caught an error: ${error} ${info}`);
-  }
-
-  componentDidUpdate() {
-    if (this.state.hasError) {
-      setTimeout(() => this.setState({
-        redirect: true
-      }), 5000);
-    }
-  }
-
-  render() {
-    if (this.state.redirect) {
-      return /*#__PURE__*/_react.default.createElement(_router.Redirect, {
-        to: "/"
-      });
-    }
-
-    if (this.state.hasError) {
-      return /*#__PURE__*/_react.default.createElement("h1", null, "There was an error with this listing. ", /*#__PURE__*/_react.default.createElement(_router.Link, {
-        to: "/"
-      }, "Click here"), " ", "to go back to the home page or wait five seconds.");
-    }
-
-    return this.props.children;
-  }
-
-}
-
-var _default = ErrorBoundary;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js","@reach/router":"../node_modules/@reach/router/es/index.js"}],"react/Details.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = DetailsWithErrorBoundling;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _pet = _interopRequireDefault(require("@frontendmasters/pet"));
-
-var _router = require("@reach/router");
-
-var _Modal = _interopRequireDefault(require("./Modal"));
-
-var _Carousel = _interopRequireDefault(require("./Carousel"));
-
-var _ErrorBoundary = _interopRequireDefault(require("./ErrorBoundary"));
-
-var _ThemeContext = _interopRequireDefault(require("./ThemeContext"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-class Details extends _react.default.Component {
-  constructor(props) {
-    super(props); // an initial state:
-
-    _defineProperty(this, "toggleModal", () => this.setState({
-      showModal: !this.state.showModal
-    }));
-
-    _defineProperty(this, "adopt", () => (0, _router.navigate)(this.state.url));
-
-    this.state = {
-      loader: true,
-      showModal: false
-    };
-  }
-
-  // Called immediately after the component is mounted:
-  componentDidMount() {
-    _pet.default.animal(Number(this.props.id)).then(({
-      animal
-    }) => {
-      this.setState({
-        url: animal.url,
-        animal: animal.type,
-        name: animal.name,
-        breed: animal.breeds.primary,
-        media: animal.photos,
-        location: `${animal.contact.address.city} - ${animal.contact.address.state}`,
-        description: animal.description,
-        loader: false
-      });
-    }, console.error);
-  }
-
-  render() {
-    if (this.state.loader === true) {
-      return /*#__PURE__*/_react.default.createElement("h1", null, "Loading...");
-    } else {
-      let {
-        name,
-        animal,
-        breed,
-        location,
-        description,
-        media,
-        showModal
-      } = this.state;
-      return /*#__PURE__*/_react.default.createElement("div", {
-        className: "details"
-      }, /*#__PURE__*/_react.default.createElement(_Carousel.default, {
-        media: media
-      }), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, name), /*#__PURE__*/_react.default.createElement("h2", null, `${animal} - ${breed} - ${location}`), /*#__PURE__*/_react.default.createElement("p", null, " ", description), /*#__PURE__*/_react.default.createElement(_ThemeContext.default.Consumer, null, ([theme]) => /*#__PURE__*/_react.default.createElement("button", {
-        onClick: this.toggleModal,
-        style: {
-          backgroundColor: theme.buttonColor
-        }
-      }, "Adopt ", name)), showModal ? /*#__PURE__*/_react.default.createElement(_Modal.default, null, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, "Would you like to adopt ", name, "?"), /*#__PURE__*/_react.default.createElement("div", {
-        className: "buttons"
-      }, /*#__PURE__*/_react.default.createElement("button", {
-        onClick: this.adopt
-      }, "Yes"), /*#__PURE__*/_react.default.createElement("button", {
-        onClick: this.toggleModal
-      }, "No, I am a monster")))) : null));
-    }
-  }
-
-}
-
-function DetailsWithErrorBoundling(props) {
-  return /*#__PURE__*/_react.default.createElement(_ErrorBoundary.default, null, /*#__PURE__*/_react.default.createElement(Details, props));
-}
-},{"react":"../node_modules/react/index.js","@frontendmasters/pet":"../node_modules/@frontendmasters/pet/index.js","@reach/router":"../node_modules/@reach/router/es/index.js","./Modal":"react/Modal.js","./Carousel":"react/Carousel.js","./ErrorBoundary":"react/ErrorBoundary.js","./ThemeContext":"react/ThemeContext.js"}],"react/App.js":[function(require,module,exports) {
-"use strict";
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _reactDom = require("react-dom");
-
-var _router = require("@reach/router");
-
-var _SearchParam = _interopRequireDefault(require("./SearchParam"));
-
-var _Details = _interopRequireDefault(require("./Details"));
-
-var _ThemeContext = _interopRequireDefault(require("./ThemeContext"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-const App = () => {
-  var themeHook = (0, _react.useState)({
-    buttonColor: "darkblue",
-    textColor: "white"
-  });
-  return /*#__PURE__*/_react.default.createElement(_react.default.StrictMode, null, /*#__PURE__*/_react.default.createElement(_ThemeContext.default.Provider, {
-    value: themeHook
-  }, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("header", null, /*#__PURE__*/_react.default.createElement(_router.Link, {
-    to: "/"
-  }, /*#__PURE__*/_react.default.createElement("h1", {
-    id: "something-important"
-  }, "Adopt me!"))), /*#__PURE__*/_react.default.createElement(_router.Router, null, /*#__PURE__*/_react.default.createElement(_SearchParam.default, {
-    path: "/"
-  }), /*#__PURE__*/_react.default.createElement(_Details.default, {
-    path: "/details/:id"
-  })))));
-};
-
-(0, _reactDom.render)( /*#__PURE__*/_react.default.createElement(App, null), // What to render...
-document.getElementById("root") // Where to render...
-);
-},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","@reach/router":"../node_modules/@reach/router/es/index.js","./SearchParam":"react/SearchParam.js","./Details":"react/Details.js","./ThemeContext":"react/ThemeContext.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./impl":"../node_modules/@frontendmasters/pet/impl.js","./animals":"../node_modules/@frontendmasters/pet/animals.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -33206,7 +32829,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51485" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49687" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -33382,5 +33005,29 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","react/App.js"], null)
+},{}],"../node_modules/parcel-bundler/src/builtins/loaders/browser/js-loader.js":[function(require,module,exports) {
+module.exports = function loadJSBundle(bundle) {
+  return new Promise(function (resolve, reject) {
+    var script = document.createElement('script');
+    script.async = true;
+    script.type = 'text/javascript';
+    script.charset = 'utf-8';
+    script.src = bundle;
+
+    script.onerror = function (e) {
+      script.onerror = script.onload = null;
+      reject(e);
+    };
+
+    script.onload = function () {
+      script.onerror = script.onload = null;
+      resolve();
+    };
+
+    document.getElementsByTagName('head')[0].appendChild(script);
+  });
+};
+},{}],0:[function(require,module,exports) {
+var b=require("../node_modules/parcel-bundler/src/builtins/bundle-loader.js");b.register("js",require("../node_modules/parcel-bundler/src/builtins/loaders/browser/js-loader.js"));
+},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js",0,"react/App.js"], null)
 //# sourceMappingURL=/App.4f61aa94.js.map
