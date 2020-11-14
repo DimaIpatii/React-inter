@@ -2,6 +2,7 @@ node_modules/
 .DS_Store
 .cache/
 notes/
+dist/
 complete-intro-to-react-v5-master/
 coverage/
 .vscode/
