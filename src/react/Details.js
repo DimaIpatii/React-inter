@@ -4,11 +4,11 @@ import { navigate } from "@reach/router";
 import Carousel from "./Carousel";
 import ErrorBoundary from "./ErrorBoundary";
 import ThemeContext from "./ThemeContext";
-import _ from "lodash";
+/* import _ from "lodash";
 import moment from "moment";
-console.log(_, moment());
-
-const Modal = lazy(() => import('./Modal'));
+console.log(_, moment()); */
+import Modal from './Modal';
+//const Modal = lazy(() => import('./Modal'));
 
 
 class Details extends React.Component {
@@ -97,7 +97,6 @@ export default function DetailsWithErrorBoundling(props) {
   
   return (
     <ErrorBoundary>
-      
       <Details {...props} />
     </ErrorBoundary>
   );

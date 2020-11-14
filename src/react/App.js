@@ -1,11 +1,12 @@
 
-import React, { useState, lazy, Suspense } from "react";
-import { render } from "react-dom";
+import React, { useState, Suspense } from "react";
 import { Router, Link } from "@reach/router";
 import ThemeContext from "./ThemeContext";
 
-const Details = lazy(() => import("./Details"));
-const SearchParam = lazy(() => import('./SearchParam'));
+import Details from './Details';
+import SearchParam from './SearchParam';
+/* const Details = React.lazy(() => import("./Details"));
+const SearchParam = React.lazy(() => import('./SearchParam')); */
 
 const App = () => {
   var themeHook = useState({
@@ -22,19 +23,17 @@ const App = () => {
               <h1 id="something-important">Adopt me!</h1>
             </Link>
           </header>
-          <Suspense fallback={<h1>loading route …</h1>}>
+          {/* <Suspense fallback={<h1>loading route …</h1>}> */}
             <Router>
               <SearchParam path="/" />
               <Details path="/details/:id" />
             </Router>
-        </Suspense>
+        {/* </Suspense> */}
         </div>
       </ThemeContext.Provider>
     </React.StrictMode>
   );
 };
 
-render(
-  <App />, // What to render...
-  document.getElementById("root") // Where to render...
-);
+// To import into the Nede:
+export default App;
